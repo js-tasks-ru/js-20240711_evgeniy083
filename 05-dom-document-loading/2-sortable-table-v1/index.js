@@ -74,18 +74,31 @@ export default class SortableTable {
     this.subElements.body.innerHTML = sortedData.map(item => this.getBodyRow(item)).join('');
   }
 
+  // sortData(field, order) {
+  //   const sortType = this.headerConfig.find(item => item.id === field).sortType;
+  //   const direction = order === 'asc' ? 1 : -1;
+
+  //   return [...this.data].sort((a, b) => {
+  //     switch (sortType) {
+  //     case 'number':
+  //       return direction * (a[field] - b[field]);
+  //     case 'string':
+  //       return direction * a[field].localeCompare(b[field], ['ru-RU-u-kf-upper', 'en-US-u-kf-upper']);
+  //     default:
+  //       return 0;
+  //     }
+  //   });
+  // }
   sortData(field, order) {
     const sortType = this.headerConfig.find(item => item.id === field).sortType;
-    const direction = order === 'asc' ? 1 : -1;
 
-    return [...this.data].sort((a, b) => {
-      switch (sortType) {
-      case 'number':
-        return direction * (a[field] - b[field]);
-      case 'string':
-        return direction * a[field].localeCompare(b[field]);
-      default:
-        return 0;
+    return this.data.sort((a, b) => {
+      if (sortType === "string") {
+        return order === "asc" 
+          ? a[field].localeCompare(b[field], ["ru-RU-u-kf-upper", "en-US-u-kf-upper"])
+          : b[field].localeCompare(a[field], ["ru-RU-u-kf-upper", "en-US-u-kf-upper"]);
+      } else {
+        return order === "asc" ? a[field] - b[field] : b[field] - a[field];
       }
     });
   }

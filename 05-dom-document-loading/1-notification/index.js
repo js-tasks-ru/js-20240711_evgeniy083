@@ -1,4 +1,5 @@
 export default class NotificationMessage {
+  static activeNotification;
 
   constructor(message, { duration = 1000, type = 'success' } = {}) {
     this.message = message;
@@ -18,6 +19,12 @@ export default class NotificationMessage {
   }
     
   show(container = document.body) {
+    if (NotificationMessage.activeNotification) {
+      NotificationMessage.activeNotification.destroy();
+    }
+
+    NotificationMessage.activeNotification = this;
+
     container.append(this.element);
     
     setTimeout(() => {
